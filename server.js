@@ -12,7 +12,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 
-const port = 3000;
+// 提供 Vite 編譯後的靜態檔案
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// 讀取環境變數 PORT，讓雲端平台可以自行分配通訊埠
+const port = process.env.PORT || 3000;
 let hotelsData = [];
 
 function loadData() {
@@ -460,6 +464,11 @@ app.get('/api/suggestions', (req, res) => {
     }));
 
     res.json(suggestions);
+});
+
+// 所有未匹配到 API 的請求，都回傳前端的 index.html (處理 Vite Router)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
