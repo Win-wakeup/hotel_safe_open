@@ -467,7 +467,7 @@ app.get('/api/suggestions', (req, res) => {
 });
 
 // 所有未匹配到 API 的請求，都回傳前端的 index.html (處理 Vite Router)
-app.get('*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
